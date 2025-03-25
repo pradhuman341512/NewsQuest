@@ -11,7 +11,6 @@ import {
 
 import Link from "next/link"
 import { useState } from "react"
-import { Button } from "./ui/button"
 import { IoMenu } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
 export const MenuBox = () => {
@@ -25,27 +24,25 @@ export const MenuBox = () => {
     <div className=" flex lg:hidden md:hidden text-xl font-semibold" >
         <Menubar className="md:hidden lg:hidden bg-black">
             <MenubarMenu>
-                <MenubarTrigger className="md:hidden lg:hidden " >
-                    <Button onClick={toggleMobileOpen} className=" bg-black text-white w-full h-full " >
+                <MenubarTrigger className="md:hidden lg:hidden  text-white hover:text-white font-bold"  onClick={toggleMobileOpen}>
                         {
-                          isMobileMenuOpen ?  (<IoMenu   />) : (<IoClose />)
+                          isMobileMenuOpen ? (<IoClose className="text-white"/>):  (<IoMenu />) 
                        }
-                    </Button>
                 </MenubarTrigger>
                 <MenubarContent className="md:hidden lg:hidden">
                 <MenubarItem>
-                <Link href='/'>News</Link>
+                <Link href='/ai'>Ai</Link>
                 </MenubarItem>
                 <MenubarItem>
-                <Link href='/'>Categories</Link>
-                </MenubarItem>
-                <MenubarSeparator />
-                <MenubarItem>
-                <Link href='/'>About US</Link>
+                <Link href='/catogories'>Categories</Link>
                 </MenubarItem>
                 <MenubarSeparator />
                 <MenubarItem>
-                <Link href='/'>Contact</Link>
+                <Link href='/about'>About US</Link>
+                </MenubarItem>
+                <MenubarSeparator />
+                <MenubarItem>
+                <Link href='/contact'>Contact</Link>
                 </MenubarItem>
                 </MenubarContent>
             </MenubarMenu> 
