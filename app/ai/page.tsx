@@ -1,9 +1,12 @@
 // Correct for `app/ai/page.js`
 export default function AiPage() {
   return (
-    <div className="w-screen h-screen">
-      <h1>Welcome to the AI Page!</h1>
-    </div>
+    <section className="flex items-center justify-center ">
+      <h2 className="text-2xl font-bold mb-10 mt-10">Latest News</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3">
+          
+      </div>
+    </section>
   );
 }
 
