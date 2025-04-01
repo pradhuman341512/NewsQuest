@@ -8,10 +8,10 @@ interface NewsCardProps{
 }
 export const NewsCard = ({item}:NewsCardProps) => {
   return (
-    <div className="border p-4 rounded-md shadow-sm ">
+    <div className="border p-4 rounded-md shadow-sm  h-[500px]">
         <Link href={`/ai/${item.source.id}`}>
         <Image 
-        src={item?.urlToImage}
+        src={item?.urlToImage || "/fallback.jpg"}
         alt={item?.title}
         width={1000}
         height={1000} 
@@ -25,7 +25,9 @@ export const NewsCard = ({item}:NewsCardProps) => {
 <p className="mt-2 mb-4">
   {item?.description ? item.description.substring(0, 100) : 'No Description Available'}...
 </p>
-
+    <Link href={`/ai/${item.source.id}`}>
+    <Button className="bg-white text-blue-500 hover:bg-white cursor-pointer">Read More</Button>
+      </Link>
     </div>
   )
 }

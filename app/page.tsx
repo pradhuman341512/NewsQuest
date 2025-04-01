@@ -1,6 +1,6 @@
 import { Banner } from "@/components/Banner";
-import { LatestNews } from "./latestNews";
 import { NewsLatter } from "./NewsLatter";
+import LatestNews from "./latestNews";
 
 export default function Home() {
   return (
