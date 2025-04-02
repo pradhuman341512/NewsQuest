@@ -36,7 +36,7 @@ export const NewsList = () => {
       ) : news.length === 0 ? (
         <p>No news available. Try a different search.</p>
       ) : (
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-6">
           {news.map((item: NewsArticle) => (
             <NewsCard key={item?.url} item={item} />
           ))}

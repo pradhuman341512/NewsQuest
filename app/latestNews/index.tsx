@@ -5,15 +5,10 @@ import Link from "next/link";
 
 export default async function LatestNews() {
   try {
-    const API_KEY = process.env.NEWS_API_KEY; // Secure the API key
-    if (!API_KEY) {
-      throw new Error("API_KEY is not defined in the environment variables.");
-    }
-
-    const today = new Date().toISOString().split("T")[0]; // Get today's date
+   
 
     const response = await fetch(
-      `https://newsapi.org/v2/everything?q=tesla&from=${today}&sortBy=publishedAt&apiKey=${API_KEY}`
+      `https://newsapi.org/v2/everything?q=tesla&from=&sortBy=publishedAt&apiKey=02b8f941fee140bc81474aeb66bb939e`
     );
 
     // Log response status for debugging
@@ -28,7 +23,7 @@ export default async function LatestNews() {
     const news = Array.isArray(data.articles) ? data.articles : [];
 
     return (
-      <div className="flex flex-col items-center justify-between p-16 gap-8">
+      <div className="flex flex-col items-center w-screen justify-between p-16 gap-8">
         <h1 className="text-5xl font-semibold">Latest News</h1>
 
         {news.length > 0 ? (
