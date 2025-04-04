@@ -11,7 +11,7 @@ export const NewsCard = ({item}:NewsCardProps) => {
     <div className="border p-4 rounded-md shadow-sm  h-[500px]">
         <Link href={`/ai/${item.source.id}`}>
         <Image 
-        src={item?.urlToImage || "/fallback.jpg"}
+        src={item?.urlToImage}
         alt={item?.title}
         width={1000}
         height={1000} 

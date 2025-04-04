@@ -2,70 +2,75 @@ import { NewsArticle } from "@/components/type/news";
 import Image from "next/image";
 
 export const revalidate = 60;
-
 export const dynamicParams = true;
 
+// ✅ Generate static paths for dynamic routes
 export async function generateStaticParams() {
-  const news: NewsArticle[] = await fetch(
-    `https://newsapi.org/v2/everything?q=tesla&from=&sortBy=publishedAt&apiKey=02b8f941fee140bc81474aeb66bb939e`
-  ).then((res) => res.json());
-  return news.map((item) => ({
-    id: String(item?.source.id),
+  const res = await fetch(
+    `https://newsapi.org/v2/everything?q=tesla&sortBy=publishedAt&apiKey=02b8f941fee140bc81474aeb66bb939e`
+  );
+  const data = await res.json();
+
+  if (!data.articles) return [];
+
+  return data.articles.map((article: NewsArticle) => ({
+    id: encodeURIComponent(article.url), // Encoding URL to make it a valid parameter
   }));
 }
 
+// ✅ Page Component
 const NewsDetailspage = async ({ params }: { params: { id: string } }) => {
-  const post = await fetch(
-    `https://newsapi.org/v2/everything?q=tesla&from=&sortBy=publishedAt&apiKey=02b8f941fee140bc81474aeb66bb939e/${params.id}`
-  ).then((res) => res.json());
-
-  if (!post) {
-    return <div>News is Not Found!</div>;
+  if (!params?.id) {
+    return <div>Error: Missing News ID!</div>;
   }
-  return (
-    <section className="py-12">
-      <article className="max-w-4xl mx-auto p-6 shadow-md border rounded-lg">
-        {post?.url && (
-          <div>
-            <Image
-              src={post?.urlToImage}
-              alt={post?.title}
-              width={800}
-              height={450}
-              className="rounded-md object-cover"
-            />
-          </div>
-        )}
 
-        <div className="my-5">
-          <h2 className="text-3xl font-bold mb-4">{post?.title}</h2>
+  try {
+    const res = await fetch(
+      `https://newsapi.org/v2/everything?q=${encodeURIComponent(params.id)}&apiKey=02b8f941fee140bc81474aeb66bb939e`
+    );
 
-          <div className="flex justify-between items-center text-sm mb-4">
-            <p>{new Date(post?.publishedAt).toLocaleDateString()}</p>
-            
-          </div>
-        </div>
+    if (!res.ok) {
+      throw new Error("Failed to fetch news data");
+    }
 
-        <div className="mb-4">
-          {post?.categories?.map((category: string) => (
-            <span
-              key={category}
-              className="bg-blue-100 text-blue-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
-            >
-              {category}
-            </span>
-          ))}
-        </div>
+    const post = await res.json();
+    const article: NewsArticle | undefined = post.articles?.[50];
 
-        {/* Snippet */}
-        <p className=" mb-2">{post?.content}</p>
+    if (!article) {
+      return <div>News Not Found!</div>;
+    }
 
-        {/* Full Description */}
-        <p className=" mb-4">{post?.description}</p>
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Libero, fugit, adipisci commodi ea alias voluptatibus consequuntur neque nulla ex dicta reiciendis cupiditate quisquam quae. Vitae provident fugit officia fuga ipsam! Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam laboriosam perspiciatis ad labore repudiandae quis, accusamus inventore. Eius aperiam obcaecati molestias possimus nulla saepe reprehenderit rerum voluptas veritatis? Expedita, sed?</p>
-      </article>
-    </section>
-  );
+    return (
+      <section className="  flex p-2 items-center justify-center">
+  <article className="max-w-4xl mx-auto p-6 shadow-md border rounded-lg flex flex-col gap-6">
+    {/* ✅ Ensure Image `src` is valid */}
+    {article?.urlToImage ? (
+      <div>
+        <Image
+          src={article.urlToImage}
+          alt={article.title || "News Image"}
+          width={1000}
+          height={450}
+          className="rounded-md object-cover"
+        />
+      </div>
+    ) : (
+      <p className="text-gray-500">No image available</p>
+    )}
+
+    <h2 className="text-3xl font-bold">{article?.title} by: {article?.author}</h2>
+    <p className="text-sm text-gray-500">
+      Published on: {new Date(article?.publishedAt).toLocaleDateString()}
+    </p>
+    <p className="text-gray-700">{article?.description}</p>
+    <p className="text-gray-700">{article?.content}</p>
+  </article>
+</section>
+
+    );
+  } catch (error) {
+    return <div>Error fetching news: {}</div>;
+  }
 };
 
 export default NewsDetailspage;

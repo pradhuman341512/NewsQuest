@@ -12,6 +12,7 @@ import { usePathname } from "next/navigation";
 
 export const NavMenu = () => {
   const path = usePathname();
+  
   return (
     <div className="hidden md:flex lg:flex">
       <NavigationMenu className="flex text-xl font-semibold">
